@@ -9,6 +9,7 @@ import com.example.myweather.util.Utility;
 
 import android.app.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -43,8 +44,8 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		temp1Text=(TextView)findViewById(R.id.temp1);
 		temp2Text=(TextView)findViewById(R.id.temp2);
 		currentDataText=(TextView)findViewById(R.id.current_data);
-		//switchCity=(Button)findViewById(R.id.switch_city);
-		//refreshWeather=(Button)findViewById(R.id.refresh_weather);
+		switchCity=(Button)findViewById(R.id.switch_city);
+		refreshWeather=(Button)findViewById(R.id.refresh_weather);
 		String countyCode=getIntent().getStringExtra("county_code");
 		if(!TextUtils.isEmpty(countyCode)){
 			publishText.setText("Í¬²½ÖÐ...");
@@ -54,16 +55,15 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		}else{
 			showWeather();
 		}
-		//switchCity.setOnClickListener(this);
-		//refreshWeather.setOnClickListener(this);
+		switchCity.setOnClickListener(this);
+		refreshWeather.setOnClickListener(this);
 	}
 	@Override
 	public void onClick(View v){
-		return ;
-		/*switch (v.getId()) {
-		case R.id.swich_city:
+		switch (v.getId()) {
+		case R.id.switch_city:
 			Intent intent=new Intent(this,ChooseAreaActivity.class);
-			intent.putExtra("from_weather_city", true);
+			intent.putExtra("from_weater_activity", true);
 			startActivity(intent);
 			finish();
 			break;
@@ -77,7 +77,7 @@ public class WeatherActivity extends Activity implements OnClickListener{
 			break;
 		default:
 			break;
-		}*/
+		}
 	}
 	private void queryWeatherCode(String countyCode){
 		String address="http://www.weather.com.cn/data/list3/city"+countyCode+".xml";
