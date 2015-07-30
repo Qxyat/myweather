@@ -7,17 +7,14 @@ import com.example.myweather.model.City;
 import com.example.myweather.model.County;
 import com.example.myweather.model.Province;
 
-import android.R.integer;
-import android.content.ContentResolver;
+
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
+
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.os.Bundle;
+import android.util.Log;
+
 
 public class CoolWeatherDB {
 	public static final String DB_NAME="cool_weather";
@@ -59,14 +56,16 @@ public class CoolWeatherDB {
 		if(city!=null){
 			ContentValues contentValues=new ContentValues();
 			contentValues.put("city_name", city.getCityName());
-			contentValues.put("city_cod", city.getCityCode());
+			contentValues.put("city_code", city.getCityCode());
 			contentValues.put("province_id", city.getProvinceID());
+			Log.d("saveCity", city.getCityName());
 			db.insert("City", null, contentValues);
 		}
 	}
 	public List<City> loadCities(int provinceId){
 		List<City> list=new ArrayList<City>();
 		Cursor cursor=db.query("City", null, "province_id=?", new String[]{String.valueOf(provinceId)}, null, null, null);
+		Log.d("loadCities", String.valueOf(provinceId));
 		if(cursor.moveToFirst()){
 			do{
 				City city=new City();
@@ -74,6 +73,7 @@ public class CoolWeatherDB {
 				city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
 				city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
 				city.setProvinceID(provinceId);
+				list.add(city);
 			}while(cursor.moveToNext());
 		}
 		return list;
@@ -97,6 +97,7 @@ public class CoolWeatherDB {
 				county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
 				county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
 				county.setCityId(cityId);
+				list.add(county);
 			}while(cursor.moveToNext());
 		}
 		return list;
